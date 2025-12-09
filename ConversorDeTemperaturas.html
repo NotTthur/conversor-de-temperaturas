@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Conversor de Temperaturas</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(#82c4ff, #bde3ff);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #003366;
+    }
+
+    /* Fundo temático */
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://i.imgur.com/IFZP4vx.png'); /* gelo */
+        background-repeat: no-repeat;
+        background-position: left bottom;
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    .sun {
+        position: fixed;
+        top: 20px;
+        right: 40px;
+        width: 120px;
+        animation: rotate 20s linear infinite;
+        opacity: 0.9;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* Card principal */
+    .card {
+        background: #ffffffcc;
+        width: 400px;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 0 20px #004a9b55;
+        backdrop-filter: blur(6px);
+        animation: fade 1.5s ease;
+    }
+
+    @keyframes fade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    select, input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 2px solid #0077cc;
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #005fcc;
+    }
+
+    .resultado {
+        margin-top: 20px;
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<!-- Fundo -->
+<div class="background"></div>
+<img class="sun" src="https://i.imgur.com/KXQ9QEG.png">
+
+<div class="card">
+    <h2>🌡️ Conversor de Temperaturas</h2>
+
+    <label>Valor da temperatura:</label>
+    <input type="number" id="valor" placeholder="Digite a temperatura">
+
+    <label>Converter de:</label>
+    <select id="de">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+        <option value="R">Rankine (°R)</option>
+    </select>
+
+    <label>Para:</label>
+    <select id="para">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+        <option value="R">Rankine (°R)</option>
+    </select>
+
+    <button onclick="converter()">Converter</button>
+
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+function converter() {
+    let valor = parseFloat(document.getElementById("valor").value);
+    let de = document.getElementById("de").value;
+    let para = document.getElementById("para").value;
+
+    if (isNaN(valor)) {
+        document.getElementById("resultado").innerHTML = "Digite um valor válido!";
+        return;
+    }
+
+    // Converte para Kelvin primeiro (base universal)
+    let kelvin;
+
+    switch (de) {
+        case "C": kelvin = valor + 273.15; break;
+        case "F": kelvin = (valor + 459.67) * 5/9; break;
+        case "K": kelvin = valor; break;
+        case "R": kelvin = valor * 5/9; break;
+    }
+
+    // Converte da base Kelvin para a escala desejada
+    let resultado;
+
+    switch (para) {
+        case "C": resultado = kelvin - 273.15; break;
+        case "F": resultado = kelvin * 9/5 - 459.67; break;
+        case "K": resultado = kelvin; break;
+        case "R": resultado = kelvin * 9/5; break;
+    }
+
+    document.getElementById("resultado").innerHTML =
+        `Resultado: <br><span style="font-size:26px">${resultado.toFixed(2)} °${para}</span>`;
+}
+</script>
+
+</body>
+</html>
